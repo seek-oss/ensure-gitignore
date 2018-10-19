@@ -1,7 +1,7 @@
 {
   "name": "gitignore-ensure",
   "version": "0.0.0-development",
-  "description": "Ensure the presence of paths within a project's gitignore",
+  "description": "Ensure the presence of patterns within a project's gitignore",
   "main": "index.js",
   "scripts": {
     "commit": "git-cz",
