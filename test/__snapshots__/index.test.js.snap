@@ -6,11 +6,11 @@ b
 c
 d
 
-e # managed
+e
 "
 `;
 
-exports[`managed-ignore append custom suffix 1`] = `
+exports[`managed-ignore append comment 1`] = `
 "a/**
 b
 c
@@ -28,7 +28,7 @@ b
 c
 d
 
-e # managed
+e
 "
 `;
 
@@ -52,16 +52,16 @@ d
 
 exports[`managed-ignore take over and append new 1`] = `
 "a/**
-b # managed
+b
 c
 d
 
-f # managed
+f
 "
 `;
 
 exports[`managed-ignore take over ignore 1`] = `
-"a/** # managed
+"a/**
 b
 c
 d
@@ -74,6 +74,6 @@ b
 c
 d
 
-a # managed
+a
 "
 `;

@@ -17,23 +17,6 @@ const unindent = str =>
     .join('\n');
 
 describe('managed-ignore', () => {
-  describe('file system test', () => {
-    const filepath = path.join(__dirname, 'output/write');
-
-    beforeAll(() => fs.writeFileSync(filepath, '', 'utf-8'));
-    afterAll(() => fs.unlinkSync(filepath));
-
-    it('write', () => {
-      managedIgnore({
-        ignores: ['a'],
-        filepath
-      });
-      expect(read(filepath)).toEqual(unindent`
-      a # managed
-      `);
-    });
-  });
-
   it('empty managed', () => {
     expect(
       managedIgnore({
@@ -73,12 +56,12 @@ describe('managed-ignore', () => {
     ).toMatchSnapshot();
   });
 
-  it('append custom suffix', () => {
+  it('append comment', () => {
     expect(
       managedIgnore({
         ignores: ['e'],
         filepath: path.join(__dirname, 'output/append'),
-        suffix: 'managed externally',
+        comment: 'managed externally',
         dryRun: true
       })
     ).toMatchSnapshot();
@@ -121,5 +104,19 @@ describe('managed-ignore', () => {
       });
 
     expect(manage).toThrowErrorMatchingSnapshot();
+  });
+
+  describe('file system test', () => {
+    const filepath = path.join(__dirname, 'output/write');
+
+    beforeAll(() => fs.writeFileSync(filepath, '', 'utf-8'));
+    afterAll(() => fs.unlinkSync(filepath));
+
+    it('write', () => {
+      managedIgnore({ ignores: ['a'], comment: 'managed', filepath });
+      expect(read(filepath)).toEqual(unindent`
+      a # managed
+      `);
+    });
   });
 });

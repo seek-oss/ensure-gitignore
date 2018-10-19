@@ -23,13 +23,29 @@ ensure({
 Path to the `.gitignore` file to be used.
 
 #### ignores (?Array\<string>)
-An array of strings to ensure are present in the specified `.gitignore` file. Any ignore that already exists in the file will be appended with the [suffix](#suffix). All new ignores will be appended to the bottom of the file.
+An array of strings to ensure are present in the specified `.gitignore` file. Any ignore that already exists in the file will be appended with the [comment](#comment). All new ignores will be appended to the bottom of the file.
 
-<a id="suffix">
+<a id="comment">
 
-#### suffix (?string, default: "managed")
+#### comment (?string)
 Appended to each path that is being ensured to indicate what is programmatically being controlled.
 
+```js
+const ensure = require('gitignore-ensure');
+
+ensure({
+  ignores: [
+    'node_modules',
+    'output'
+  ],
+  comment: 'managed'
+});
+
+// =>
+// node_modules # managed
+// output # managed
+//
+```
 #### dryRun (?boolean, default: false)
 The file at the input path will not be updated, instead the intended output will be returned.
 
