@@ -1,27 +1,23 @@
 const fs = require('fs');
 const path = require('path');
-const { promisify } = require('util');
 
-const writeFile = promisify(fs.writeFile);
-const readFile = promisify(fs.readFile);
-
-const write = async (filepath, output, dryRun) => {
-  if (!dryRun) {
-    await writeFile(filepath, output);
-  }
-  return output;
-};
-
-const writeSync = (filepath, output, dryRun) => {
+const write = (filepath, output, dryRun) => {
   if (!dryRun) {
     fs.writeFileSync(filepath, output);
   }
   return output;
 };
 
-const build = ({ patterns, comment, current }) => {
+module.exports = ({
+  patterns = [],
+  comment = '',
+  filepath = path.resolve(process.cwd(), '.gitignore'),
+  dryRun = false
+}) => {
   const commented = str => (comment ? `${str} # ${comment}` : str);
+
   const managed = patterns.sort();
+  const current = fs.readFileSync(filepath, 'utf-8').split(/\r?\n/);
 
   const corrected = current.map(
     pattern => (managed.includes(pattern) ? commented(pattern) : pattern)
@@ -32,41 +28,11 @@ const build = ({ patterns, comment, current }) => {
     .map(commented);
 
   const outputPatterns = corrected.concat(additions);
-  return `${outputPatterns.join('\n')}${
+  const output = `${outputPatterns.join('\n')}${
     outputPatterns[outputPatterns.length - 1] === '' ? '' : '\n'
   }`;
-};
-
-const gitignoreEnsure = async ({
-  patterns = [],
-  comment = '',
-  filepath = path.resolve(process.cwd(), '.gitignore'),
-  dryRun = false
-}) => {
-  const current = await readFile(filepath, 'utf-8').split(/\r?\n/);
-
-  const output = build({ patterns, comment, current });
 
   return current.join('\n') !== output
     ? write(filepath, output, dryRun)
     : current.join('\n');
 };
-
-const gitignoreEnsureSync = ({
-  patterns = [],
-  comment = '',
-  filepath = path.resolve(process.cwd(), '.gitignore'),
-  dryRun = false
-}) => {
-  const current = fs.readFileSync(filepath, 'utf-8').split(/\r?\n/);
-
-  const output = build({ patterns, comment, current });
-
-  return current.join('\n') !== output
-    ? writeSync(filepath, output, dryRun)
-    : current.join('\n');
-};
-
-gitignoreEnsure.sync = gitignoreEnsureSync;
-
-module.exports = gitignoreEnsure;

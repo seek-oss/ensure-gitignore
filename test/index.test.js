@@ -156,7 +156,9 @@ f
         filepath: 'output/notfound'
       });
 
-    expect(manage).toThrowErrorMatchingInlineSnapshot();
+    expect(manage).toThrowErrorMatchingInlineSnapshot(
+      `"ENOENT: no such file or directory, open 'output/notfound'"`
+    );
   });
 
   describe('file system test', () => {
