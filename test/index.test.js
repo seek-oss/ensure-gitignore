@@ -156,7 +156,7 @@ f
         filepath: 'output/notfound'
       });
 
-    expect(manage).toThrowErrorMatchingSnapshot();
+    expect(manage).toThrowErrorMatchingInlineSnapshot();
   });
 
   describe('file system test', () => {

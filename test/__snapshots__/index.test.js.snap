@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`managed-ignore error if file not found 1`] = `"ENOENT: no such file or directory, open 'output/notfound'"`;
