@@ -1,5 +1,5 @@
 {
-  "name": "gitignore-ensure",
+  "name": "ensure-gitignore",
   "version": "0.0.0-development",
   "description": "Ensure the presence of patterns within a project's gitignore",
   "main": "index.js",
@@ -26,14 +26,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/seek-oss/gitignore-ensure.git"
+    "url": "https://github.com/seek-oss/ensure-gitignore.git"
   },
   "author": "SEEK",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/seek-oss/gitignore-ensure/issues"
+    "url": "https://github.com/seek-oss/ensure-gitignore/issues"
   },
-  "homepage": "https://github.com/seek-oss/gitignore-ensure#readme",
+  "homepage": "https://github.com/seek-oss/ensure-gitignore#readme",
   "devDependencies": {
     "@commitlint/cli": "^7.2.1",
     "commitizen": "^3.0.2",
