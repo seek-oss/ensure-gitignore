@@ -9,29 +9,27 @@ const write = (filepath, output, dryRun) => {
 };
 
 module.exports = ({
-  ignores = [],
+  patterns = [],
   comment = '',
   filepath = path.resolve(process.cwd(), '.gitignore'),
   dryRun = false
 }) => {
   const commented = str => (comment ? `${str} # ${comment}` : str);
 
-  const managed = ignores.sort();
+  const managed = patterns.sort();
   const current = fs.readFileSync(filepath, 'utf-8').split(/\r?\n/);
 
-  const corrected = current
-    // if `ignore` exact match to `managed ignore` append comment
-    .map(ignore => (managed.includes(ignore) ? commented(ignore) : ignore));
+  const corrected = current.map(
+    pattern => (managed.includes(pattern) ? commented(pattern) : pattern)
+  );
 
   const additions = managed
-    // filter out ignores already present
-    .filter(ignore => !corrected.includes(commented(ignore)))
-    // append comment to `managed ignore`
+    .filter(pattern => !corrected.includes(commented(pattern)))
     .map(commented);
 
-  const outputIgnores = corrected.concat(additions);
-  const output = `${outputIgnores.join('\n')}${
-    outputIgnores[outputIgnores.length - 1] === '' ? '' : '\n'
+  const outputPatterns = corrected.concat(additions);
+  const output = `${outputPatterns.join('\n')}${
+    outputPatterns[outputPatterns.length - 1] === '' ? '' : '\n'
   }`;
 
   return current.join('\n') !== output

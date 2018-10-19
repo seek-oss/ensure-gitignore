@@ -9,22 +9,21 @@ const read = filepath =>
     }
   });
 
-const unindent = str =>
-  (typeof str === 'string' ? [str] : str.raw)
-    .join('')
-    .split(/\r?\n/)
-    .map(s => s.trim())
-    .join('\n');
-
 describe('managed-ignore', () => {
   it('empty managed', () => {
     expect(
       managedIgnore({
-        ignores: [],
+        patterns: [],
         filepath: path.join(__dirname, 'output/append'),
         dryRun: true
       })
-    ).toMatchSnapshot();
+    ).toMatchInlineSnapshot(`
+"a/**
+b
+c
+d
+"
+`);
   });
 
   it('nothing managed', () => {
@@ -33,68 +32,122 @@ describe('managed-ignore', () => {
         filepath: path.join(__dirname, 'output/append'),
         dryRun: true
       })
-    ).toMatchSnapshot();
+    ).toMatchInlineSnapshot(`
+"a/**
+b
+c
+d
+"
+`);
   });
 
   it('append', () => {
     expect(
       managedIgnore({
-        ignores: ['e'],
+        patterns: ['e'],
         filepath: path.join(__dirname, 'output/append'),
         dryRun: true
       })
-    ).toMatchSnapshot();
+    ).toMatchInlineSnapshot(`
+"a/**
+b
+c
+d
+
+e
+"
+`);
   });
 
   it('append preserve whitespace', () => {
     expect(
       managedIgnore({
-        ignores: ['e'],
+        patterns: ['e'],
         filepath: path.join(__dirname, 'output/appendPreserveWhitespace'),
         dryRun: true
       })
-    ).toMatchSnapshot();
+    ).toMatchInlineSnapshot(`
+"a/**
+b
+
+
+c
+d
+
+e
+"
+`);
   });
 
   it('append comment', () => {
     expect(
       managedIgnore({
-        ignores: ['e'],
+        patterns: ['e'],
         filepath: path.join(__dirname, 'output/append'),
         comment: 'managed externally',
         dryRun: true
       })
-    ).toMatchSnapshot();
+    ).toMatchInlineSnapshot(`
+"a/**
+b
+c
+d
+
+e # managed externally
+"
+`);
   });
 
   it('take over ignore', () => {
     expect(
       managedIgnore({
-        ignores: ['a/**'],
+        patterns: ['a/**'],
         filepath: path.join(__dirname, 'output/append'),
         dryRun: true
       })
-    ).toMatchSnapshot();
+    ).toMatchInlineSnapshot(`
+"a/**
+b
+c
+d
+"
+`);
   });
 
   it('take over ignore exact only', () => {
     expect(
       managedIgnore({
-        ignores: ['a'],
+        patterns: ['a'],
         filepath: path.join(__dirname, 'output/append'),
         dryRun: true
       })
-    ).toMatchSnapshot();
+    ).toMatchInlineSnapshot(`
+"a/**
+b
+c
+d
+
+a
+"
+`);
   });
 
   it('take over and append new', () => {
     expect(
       managedIgnore({
-        ignores: ['b', 'f'],
+        patterns: ['b', 'f'],
         filepath: path.join(__dirname, 'output/append'),
         dryRun: true
       })
-    ).toMatchSnapshot();
+    ).toMatchInlineSnapshot(`
+"a/**
+b
+c
+d
+
+f
+"
+`);
   });
 
   it('error if file not found', () => {
@@ -113,10 +166,10 @@ describe('managed-ignore', () => {
     afterAll(() => fs.unlinkSync(filepath));
 
     it('write', () => {
-      managedIgnore({ ignores: ['a'], comment: 'managed', filepath });
-      expect(read(filepath)).toEqual(unindent`
-      a # managed
-      `);
+      managedIgnore({ patterns: ['a'], comment: 'managed', filepath });
+      expect(read(filepath)).toEqual(`
+a # managed
+`);
     });
   });
 });

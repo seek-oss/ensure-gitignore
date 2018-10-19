@@ -2,15 +2,15 @@
 
 # gitignore-ensure
 
-Ensure the presence of paths within a project's gitignore.
+Ensure the presence of patterns within a project's gitignore.
 
 ## Usage
 
 ```js
-const ensure = require('gitignore-ensure');
+const gitignoreEnsure = require('gitignore-ensure');
 
-ensure({
-  ignores: [
+gitignoreEnsure({
+  patterns: [
     'node_modules',
     'output'
   ]
@@ -22,19 +22,19 @@ ensure({
 #### filepath (string, default: '<cwd>/.gitignore')
 Path to the `.gitignore` file to be used.
 
-#### ignores (?Array\<string>)
-An array of strings to ensure are present in the specified `.gitignore` file. Any ignore that already exists in the file will be appended with the [comment](#comment). All new ignores will be appended to the bottom of the file.
+#### patterns (?Array\<string>)
+An array of patterns to ensure are present in the specified `.gitignore` file. Any pattern that already exists in the file will be appended with the [comment](#comment). All new patterns will be appended to the bottom of the file.
 
 <a id="comment">
 
 #### comment (?string)
-Appended to each path that is being ensured to indicate what is programmatically being controlled.
+Appended to each pattern that is being ensured to indicate what is programmatically being controlled.
 
 ```js
-const ensure = require('gitignore-ensure');
+const gitignoreEnsure = require('gitignore-ensure');
 
-ensure({
-  ignores: [
+gitignoreEnsure({
+  patterns: [
     'node_modules',
     'output'
   ],
@@ -50,10 +50,10 @@ ensure({
 The file at the input path will not be updated, instead the intended output will be returned.
 
 ```js
-const ensure = require('gitignore-ensure');
+const gitignoreEnsure = require('gitignore-ensure');
 
-const result = ensure({
-  ignores: [
+const result = gitignoreEnsure({
+  patterns: [
     'node_modules',
     'output'
   ],
