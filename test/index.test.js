@@ -10,14 +10,13 @@ const read = filepath =>
   });
 
 describe('managed-ignore', () => {
-  it('empty managed', () => {
-    expect(
-      managedIgnore({
-        patterns: [],
-        filepath: path.join(__dirname, 'output/append'),
-        dryRun: true
-      })
-    ).toMatchInlineSnapshot(`
+  it('empty managed', async () => {
+    const output = await managedIgnore({
+      patterns: [],
+      filepath: path.join(__dirname, 'output/append'),
+      dryRun: true
+    });
+    expect(output).toMatchInlineSnapshot(`
 "a/**
 b
 c
@@ -26,13 +25,12 @@ d
 `);
   });
 
-  it('nothing managed', () => {
-    expect(
-      managedIgnore({
-        filepath: path.join(__dirname, 'output/append'),
-        dryRun: true
-      })
-    ).toMatchInlineSnapshot(`
+  it('nothing managed', async () => {
+    const output = await managedIgnore({
+      filepath: path.join(__dirname, 'output/append'),
+      dryRun: true
+    });
+    expect(output).toMatchInlineSnapshot(`
 "a/**
 b
 c
@@ -41,14 +39,13 @@ d
 `);
   });
 
-  it('append', () => {
-    expect(
-      managedIgnore({
-        patterns: ['e'],
-        filepath: path.join(__dirname, 'output/append'),
-        dryRun: true
-      })
-    ).toMatchInlineSnapshot(`
+  it('append', async () => {
+    const output = await managedIgnore({
+      patterns: ['e'],
+      filepath: path.join(__dirname, 'output/append'),
+      dryRun: true
+    });
+    expect(output).toMatchInlineSnapshot(`
 "a/**
 b
 c
@@ -59,14 +56,13 @@ e
 `);
   });
 
-  it('append preserve whitespace', () => {
-    expect(
-      managedIgnore({
-        patterns: ['e'],
-        filepath: path.join(__dirname, 'output/appendPreserveWhitespace'),
-        dryRun: true
-      })
-    ).toMatchInlineSnapshot(`
+  it('append preserve whitespace', async () => {
+    const output = await managedIgnore({
+      patterns: ['e'],
+      filepath: path.join(__dirname, 'output/appendPreserveWhitespace'),
+      dryRun: true
+    });
+    expect(output).toMatchInlineSnapshot(`
 "a/**
 b
 
@@ -79,15 +75,14 @@ e
 `);
   });
 
-  it('append comment', () => {
-    expect(
-      managedIgnore({
-        patterns: ['e'],
-        filepath: path.join(__dirname, 'output/append'),
-        comment: 'managed externally',
-        dryRun: true
-      })
-    ).toMatchInlineSnapshot(`
+  it('append comment', async () => {
+    const output = await managedIgnore({
+      patterns: ['e'],
+      filepath: path.join(__dirname, 'output/append'),
+      comment: 'managed externally',
+      dryRun: true
+    });
+    expect(output).toMatchInlineSnapshot(`
 "a/**
 b
 c
@@ -98,14 +93,13 @@ e # managed externally
 `);
   });
 
-  it('take over ignore', () => {
-    expect(
-      managedIgnore({
-        patterns: ['a/**'],
-        filepath: path.join(__dirname, 'output/append'),
-        dryRun: true
-      })
-    ).toMatchInlineSnapshot(`
+  it('take over ignore', async () => {
+    const output = await managedIgnore({
+      patterns: ['a/**'],
+      filepath: path.join(__dirname, 'output/append'),
+      dryRun: true
+    });
+    expect(output).toMatchInlineSnapshot(`
 "a/**
 b
 c
@@ -114,14 +108,13 @@ d
 `);
   });
 
-  it('take over ignore exact only', () => {
-    expect(
-      managedIgnore({
-        patterns: ['a'],
-        filepath: path.join(__dirname, 'output/append'),
-        dryRun: true
-      })
-    ).toMatchInlineSnapshot(`
+  it('take over ignore exact only', async () => {
+    const output = await managedIgnore({
+      patterns: ['a'],
+      filepath: path.join(__dirname, 'output/append'),
+      dryRun: true
+    });
+    expect(output).toMatchInlineSnapshot(`
 "a/**
 b
 c
@@ -132,14 +125,13 @@ a
 `);
   });
 
-  it('take over and append new', () => {
-    expect(
-      managedIgnore({
-        patterns: ['b', 'f'],
-        filepath: path.join(__dirname, 'output/append'),
-        dryRun: true
-      })
-    ).toMatchInlineSnapshot(`
+  it('take over and append new', async () => {
+    const output = await managedIgnore({
+      patterns: ['b', 'f'],
+      filepath: path.join(__dirname, 'output/append'),
+      dryRun: true
+    });
+    expect(output).toMatchInlineSnapshot(`
 "a/**
 b
 c
@@ -150,25 +142,24 @@ f
 `);
   });
 
-  it('error if file not found', () => {
-    const manage = () =>
-      managedIgnore({
-        filepath: 'output/notfound'
-      });
-
-    expect(manage).toThrowErrorMatchingInlineSnapshot(
-      `"ENOENT: no such file or directory, open 'output/notfound'"`
-    );
+  it('error if file not found', async () => {
+    try {
+      await managedIgnore({ filepath: 'output/notfound' });
+    } catch ({ message }) {
+      expect(message).toEqual(
+        `ENOENT: no such file or directory, open 'output/notfound'`
+      );
+    }
   });
 
-  describe('file system test', () => {
+  describe('file system test', async () => {
     const filepath = path.join(__dirname, 'output/write');
 
     beforeAll(() => fs.writeFileSync(filepath, '', 'utf-8'));
     afterAll(() => fs.unlinkSync(filepath));
 
-    it('write', () => {
-      managedIgnore({ patterns: ['a'], comment: 'managed', filepath });
+    it('write', async () => {
+      await managedIgnore({ patterns: ['a'], comment: 'managed', filepath });
       expect(read(filepath)).toEqual(`
 a # managed
 `);

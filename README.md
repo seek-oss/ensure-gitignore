@@ -9,35 +9,32 @@ Ensure the presence of patterns within a project's gitignore.
 ```js
 const gitignoreEnsure = require('gitignore-ensure');
 
-gitignoreEnsure({
-  patterns: [
-    'node_modules',
-    'output'
-  ]
+await gitignoreEnsure({
+  patterns: ['node_modules', 'output']
 });
 ```
 
 ### Options
 
 #### filepath (string, default: '<cwd>/.gitignore')
+
 Path to the `.gitignore` file to be used.
 
 #### patterns (?Array\<string>)
+
 An array of patterns to ensure are present in the specified `.gitignore` file. Any pattern that already exists in the file will be appended with the [comment](#comment). All new patterns will be appended to the bottom of the file.
 
 <a id="comment">
 
 #### comment (?string)
+
 Appended to each pattern that is being ensured to indicate what is programmatically being controlled.
 
 ```js
 const gitignoreEnsure = require('gitignore-ensure');
 
-gitignoreEnsure({
-  patterns: [
-    'node_modules',
-    'output'
-  ],
+await gitignoreEnsure({
+  patterns: ['node_modules', 'output'],
   comment: 'managed'
 });
 
@@ -46,17 +43,16 @@ gitignoreEnsure({
 // output # managed
 //
 ```
+
 #### dryRun (?boolean, default: false)
+
 The file at the input path will not be updated, instead the intended output will be returned.
 
 ```js
 const gitignoreEnsure = require('gitignore-ensure');
 
-const result = gitignoreEnsure({
-  patterns: [
-    'node_modules',
-    'output'
-  ],
+const result = await gitignoreEnsure({
+  patterns: ['node_modules', 'output'],
   dryRun: true
 });
 

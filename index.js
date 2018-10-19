@@ -1,14 +1,18 @@
 const fs = require('fs');
 const path = require('path');
+const { promisify } = require('util');
 
-const write = (filepath, output, dryRun) => {
+const writeFile = promisify(fs.writeFile);
+const readFile = promisify(fs.readFile);
+
+const write = async (filepath, output, dryRun) => {
   if (!dryRun) {
-    fs.writeFileSync(filepath, output);
+    await writeFile(filepath, output);
   }
   return output;
 };
 
-module.exports = ({
+module.exports = async ({
   patterns = [],
   comment = '',
   filepath = path.resolve(process.cwd(), '.gitignore'),
@@ -17,7 +21,8 @@ module.exports = ({
   const commented = str => (comment ? `${str} # ${comment}` : str);
 
   const managed = patterns.sort();
-  const current = fs.readFileSync(filepath, 'utf-8').split(/\r?\n/);
+  const contents = await readFile(filepath, 'utf-8');
+  const current = contents.split(/\r?\n/);
 
   const corrected = current.map(
     pattern => (managed.includes(pattern) ? commented(pattern) : pattern)
