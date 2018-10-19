@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`managed-ignore append 1`] = `
+"a/**
+b
+c
+d
+
+e # managed
+"
+`;
+
+exports[`managed-ignore append custom suffix 1`] = `
+"a/**
+b
+c
+d
+
+e # managed externally
+"
+`;
+
+exports[`managed-ignore append preserve whitespace 1`] = `
+"a/**
+b
+
+
+c
+d
+
+e # managed
+"
+`;
+
+exports[`managed-ignore empty managed 1`] = `
+"a/**
+b
+c
+d
+"
+`;
+
+exports[`managed-ignore error if file not found 1`] = `"ENOENT: no such file or directory, open 'output/notfound'"`;
+
+exports[`managed-ignore nothing managed 1`] = `
+"a/**
+b
+c
+d
+"
+`;
+
+exports[`managed-ignore take over and append new 1`] = `
+"a/**
+b # managed
+c
+d
+
+f # managed
+"
+`;
+
+exports[`managed-ignore take over ignore 1`] = `
+"a/** # managed
+b
+c
+d
+"
+`;
+
+exports[`managed-ignore take over ignore exact only 1`] = `
+"a/**
+b
+c
+d
+
+a # managed
+"
+`;

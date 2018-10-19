@@ -1,0 +1,58 @@
+{
+  "name": "gitignore-ensure",
+  "version": "0.0.0-development",
+  "description": "Ensure the presence of paths within a project's gitignore",
+  "main": "index.js",
+  "scripts": {
+    "commit": "git-cz",
+    "semantic-release": "semantic-release",
+    "pretest": "eslint .",
+    "test": "jest"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint --edit --extends seek",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --single-quote --write",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seek-oss/gitignore-ensure.git"
+  },
+  "author": "SEEK",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seek-oss/gitignore-ensure/issues"
+  },
+  "homepage": "https://github.com/seek-oss/gitignore-ensure#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^7.2.1",
+    "commitizen": "^3.0.2",
+    "commitlint-config-seek": "^1.0.0",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^5.7.0",
+    "eslint-config-seek": "^3.2.1",
+    "husky": "^1.1.2",
+    "jest": "^23.6.0",
+    "lint-staged": "^7.3.0",
+    "prettier": "^1.14.3",
+    "semantic-release": "^15.10.3"
+  },
+  "release": {
+    "success": false
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
