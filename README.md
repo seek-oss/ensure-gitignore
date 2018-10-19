@@ -1,15 +1,15 @@
-[![Build Status](https://img.shields.io/travis/seek-oss/gitignore-ensure/master.svg?style=flat-square)](http://travis-ci.org/seek-oss/gitignore-ensure) [![npm](https://img.shields.io/npm/v/gitignore-ensure.svg?style=flat-square)](https://www.npmjs.com/package/gitignore-ensure) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)](http://commitizen.github.io/cz-cli/)
+[![Build Status](https://img.shields.io/travis/seek-oss/ensure-gitignore/master.svg?style=flat-square)](http://travis-ci.org/seek-oss/ensure-gitignore) [![npm](https://img.shields.io/npm/v/ensure-gitignore.svg?style=flat-square)](https://www.npmjs.com/package/ensure-gitignore) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)](http://commitizen.github.io/cz-cli/)
 
-# gitignore-ensure
+# ensure-gitignore
 
 Ensure the presence of patterns within a project's gitignore.
 
 ## Usage
 
 ```js
-const gitignoreEnsure = require('gitignore-ensure');
+const ensureGitignore = require('ensure-gitignore');
 
-await gitignoreEnsure({
+await ensureGitignore({
   patterns: ['node_modules', 'output']
 });
 ```
@@ -31,9 +31,9 @@ An array of patterns to ensure are present in the specified `.gitignore` file. A
 Appended to each pattern that is being ensured to indicate what is programmatically being controlled.
 
 ```js
-const gitignoreEnsure = require('gitignore-ensure');
+const ensureGitignore = require('ensure-gitignore');
 
-await gitignoreEnsure({
+await ensureGitignore({
   patterns: ['node_modules', 'output'],
   comment: 'managed'
 });
@@ -49,9 +49,9 @@ await gitignoreEnsure({
 The file at the input path will not be updated, instead the intended output will be returned.
 
 ```js
-const gitignoreEnsure = require('gitignore-ensure');
+const ensureGitignore = require('ensure-gitignore');
 
-const result = await gitignoreEnsure({
+const result = await ensureGitignore({
   patterns: ['node_modules', 'output'],
   dryRun: true
 });
