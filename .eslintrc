@@ -1,0 +1,7 @@
+{
+  "extends": "seek",
+  "rules": {
+    "no-console": 0,
+    "no-sync": 0
+  }
+}
