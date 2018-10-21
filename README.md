@@ -28,7 +28,7 @@ An array of patterns to ensure are present in the specified `.gitignore` file. A
 
 #### comment (?string)
 
-Appended to each pattern that is being ensured to indicate what is programmatically being controlled.
+Prepended to the list of provided pattens at the bottom of the file, to indicate which patterns are being controlled programmatically.
 
 ```js
 const ensureGitignore = require('ensure-gitignore');
