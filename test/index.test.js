@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const managedIgnore = require('../index');
+const ensureGitignore = require('../index');
 
 const read = filepath =>
   fs.readFileSync(filepath, 'utf-8', err => {
@@ -9,9 +9,9 @@ const read = filepath =>
     }
   });
 
-describe('managed-ignore', () => {
-  it('empty managed', async () => {
-    const output = await managedIgnore({
+describe('ensure-gitignore', () => {
+  it('empty patterns', async () => {
+    const output = await ensureGitignore({
       patterns: [],
       filepath: path.join(__dirname, 'output/append'),
       dryRun: true
@@ -25,8 +25,8 @@ d
 `);
   });
 
-  it('nothing managed', async () => {
-    const output = await managedIgnore({
+  it('no patterns', async () => {
+    const output = await ensureGitignore({
       filepath: path.join(__dirname, 'output/append'),
       dryRun: true
     });
@@ -39,8 +39,8 @@ d
 `);
   });
 
-  it('append', async () => {
-    const output = await managedIgnore({
+  it('append new pattern', async () => {
+    const output = await ensureGitignore({
       patterns: ['e'],
       filepath: path.join(__dirname, 'output/append'),
       dryRun: true
@@ -57,7 +57,7 @@ e
   });
 
   it('append preserve whitespace', async () => {
-    const output = await managedIgnore({
+    const output = await ensureGitignore({
       patterns: ['e'],
       filepath: path.join(__dirname, 'output/appendPreserveWhitespace'),
       dryRun: true
@@ -76,7 +76,7 @@ e
   });
 
   it('append comment', async () => {
-    const output = await managedIgnore({
+    const output = await ensureGitignore({
       patterns: ['e'],
       filepath: path.join(__dirname, 'output/append'),
       comment: 'managed externally',
@@ -88,28 +88,32 @@ b
 c
 d
 
-e # managed externally
+# managed externally
+e
 "
 `);
   });
 
   it('take over ignore', async () => {
-    const output = await managedIgnore({
+    const output = await ensureGitignore({
       patterns: ['a/**'],
       filepath: path.join(__dirname, 'output/append'),
+      comment: 'managed externally',
       dryRun: true
     });
     expect(output).toMatchInlineSnapshot(`
-"a/**
-b
+"b
 c
 d
+
+# managed externally
+a/**
 "
 `);
   });
 
   it('take over ignore exact only', async () => {
-    const output = await managedIgnore({
+    const output = await ensureGitignore({
       patterns: ['a'],
       filepath: path.join(__dirname, 'output/append'),
       dryRun: true
@@ -126,17 +130,17 @@ a
   });
 
   it('take over and append new', async () => {
-    const output = await managedIgnore({
+    const output = await ensureGitignore({
       patterns: ['b', 'f'],
       filepath: path.join(__dirname, 'output/append'),
       dryRun: true
     });
     expect(output).toMatchInlineSnapshot(`
 "a/**
-b
 c
 d
 
+b
 f
 "
 `);
@@ -144,7 +148,7 @@ f
 
   it('error if file not found', async () => {
     try {
-      await managedIgnore({ filepath: 'output/notfound' });
+      await ensureGitignore({ filepath: 'output/notfound' });
     } catch ({ message }) {
       expect(message).toEqual(
         `ENOENT: no such file or directory, open 'output/notfound'`
@@ -159,10 +163,12 @@ f
     afterAll(() => fs.unlinkSync(filepath));
 
     it('write', async () => {
-      await managedIgnore({ patterns: ['a'], comment: 'managed', filepath });
-      expect(read(filepath)).toEqual(`
-a # managed
-`);
+      await ensureGitignore({ patterns: ['a'], comment: 'managed', filepath });
+      expect(read(filepath)).toEqual(
+        `# managed
+a
+`
+      );
     });
   });
 });

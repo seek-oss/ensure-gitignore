@@ -39,8 +39,9 @@ await ensureGitignore({
 });
 
 // =>
-// node_modules # managed
-// output # managed
+// # managed
+// node_modules
+// output
 //
 ```
 

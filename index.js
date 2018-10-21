@@ -18,26 +18,19 @@ module.exports = async ({
   filepath = path.resolve(process.cwd(), '.gitignore'),
   dryRun = false
 }) => {
-  const commented = str => (comment ? `${str} # ${comment}` : str);
-
-  const managed = patterns.sort();
+  const sortedPatterns = patterns.sort();
   const contents = await readFile(filepath, 'utf-8');
-  const current = contents.split(/\r?\n/);
+  const userSpecified = contents
+    .split(/\r?\n/)
+    .filter(pattern => !sortedPatterns.includes(pattern));
 
-  const corrected = current.map(
-    pattern => (managed.includes(pattern) ? commented(pattern) : pattern)
-  );
+  const outputPatterns = [
+    userSpecified.join('\n').trim(),
+    sortedPatterns.join('\n').trim()
+  ]
+    .join(`\n\n${comment ? `# ${comment}\n` : ''}`)
+    .trim();
+  const output = `${outputPatterns}\n`;
 
-  const additions = managed
-    .filter(pattern => !corrected.includes(commented(pattern)))
-    .map(commented);
-
-  const outputPatterns = corrected.concat(additions);
-  const output = `${outputPatterns.join('\n')}${
-    outputPatterns[outputPatterns.length - 1] === '' ? '' : '\n'
-  }`;
-
-  return current.join('\n') !== output
-    ? write(filepath, output, dryRun)
-    : current.join('\n');
+  return contents !== output ? write(filepath, output, dryRun) : output;
 };
