@@ -21,14 +21,19 @@ module.exports = async ({
   const sortedPatterns = patterns.sort();
   const contents = await readFile(filepath, 'utf-8');
   const userSpecified = contents
+    .trim()
     .split(/\r?\n/)
     .filter(pattern => !sortedPatterns.includes(pattern));
 
+  const commentString = `# ${comment}\n`;
+  const commentStringRegEx = new RegExp(`\r?\n${commentString}`, 'g');
+  const stripOldComment = str => str.replace(commentStringRegEx, '');
+
   const outputPatterns = [
-    userSpecified.join('\n').trim(),
+    stripOldComment(userSpecified.join('\n')).trim(),
     sortedPatterns.join('\n').trim()
   ]
-    .join(`\n\n${comment ? `# ${comment}\n` : ''}`)
+    .join(`\n\n${comment ? commentString : ''}`)
     .trim();
   const output = `${outputPatterns}\n`;
 

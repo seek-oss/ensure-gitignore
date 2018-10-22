@@ -159,14 +159,35 @@ f
   describe('file system test', async () => {
     const filepath = path.join(__dirname, 'output/write');
 
-    beforeAll(() => fs.writeFileSync(filepath, '', 'utf-8'));
-    afterAll(() => fs.unlinkSync(filepath));
+    beforeEach(() => fs.writeFileSync(filepath, 'a\nb', 'utf-8'));
+    afterEach(() => fs.unlinkSync(filepath));
 
-    it('write', async () => {
+    it('write take control existing', async () => {
       await ensureGitignore({ patterns: ['a'], comment: 'managed', filepath });
       expect(read(filepath)).toEqual(
-        `# managed
+        `b
+
+# managed
 a
+`
+      );
+    });
+
+    it('write with existing comment', async () => {
+      await ensureGitignore({ patterns: ['c'], comment: 'managed', filepath });
+      await ensureGitignore({
+        patterns: ['d', 'e'],
+        comment: 'managed',
+        filepath
+      });
+      expect(read(filepath)).toEqual(
+        `a
+b
+c
+
+# managed
+d
+e
 `
       );
     });
