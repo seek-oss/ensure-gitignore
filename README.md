@@ -26,22 +26,23 @@ An array of patterns to ensure are present in the specified `.gitignore` file. A
 
 <a id="comment">
 
-#### comment (?string)
+#### comment (?string, default: 'managed by ensure-gitignore')
 
-Prepended to the list of provided pattens at the bottom of the file, to indicate which patterns are being controlled programmatically.
+Allows you to document the list of patterns that are being controlled programmatically. This helps provide context as to what is controlling certain patterns within a `.gitignore` file. Anything inside the comment block will be re-written on each run, including the removal of old patterns that are no longer managed.
 
 ```js
 const ensureGitignore = require('ensure-gitignore');
 
 await ensureGitignore({
   patterns: ['node_modules', 'output'],
-  comment: 'managed'
+  comment: 'managed by build script'
 });
 
 // =>
-// # managed
+// # managed by build script
 // node_modules
 // output
+// # end managed by build script
 //
 ```
 

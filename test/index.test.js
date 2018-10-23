@@ -51,7 +51,9 @@ b
 c
 d
 
+# managed by ensure-gitignore
 e
+# end managed by ensure-gitignore
 "
 `);
   });
@@ -70,7 +72,9 @@ b
 c
 d
 
+# managed by ensure-gitignore
 e
+# end managed by ensure-gitignore
 "
 `);
   });
@@ -79,7 +83,7 @@ e
     const output = await ensureGitignore({
       patterns: ['e'],
       filepath: path.join(__dirname, 'output/append'),
-      comment: 'managed externally',
+      comment: 'custom comment',
       dryRun: true
     });
     expect(output).toMatchInlineSnapshot(`
@@ -88,8 +92,9 @@ b
 c
 d
 
-# managed externally
+# custom comment
 e
+# end custom comment
 "
 `);
   });
@@ -98,7 +103,7 @@ e
     const output = await ensureGitignore({
       patterns: ['a/**'],
       filepath: path.join(__dirname, 'output/append'),
-      comment: 'managed externally',
+      comment: 'custom comment',
       dryRun: true
     });
     expect(output).toMatchInlineSnapshot(`
@@ -106,13 +111,14 @@ e
 c
 d
 
-# managed externally
+# custom comment
 a/**
+# end custom comment
 "
 `);
   });
 
-  it('take over ignore exact only', async () => {
+  it('take over ignore exact', async () => {
     const output = await ensureGitignore({
       patterns: ['a'],
       filepath: path.join(__dirname, 'output/append'),
@@ -124,7 +130,9 @@ b
 c
 d
 
+# managed by ensure-gitignore
 a
+# end managed by ensure-gitignore
 "
 `);
   });
@@ -140,8 +148,10 @@ a
 c
 d
 
+# managed by ensure-gitignore
 b
 f
+# end managed by ensure-gitignore
 "
 `);
   });
@@ -159,14 +169,44 @@ f
   describe('file system test', async () => {
     const filepath = path.join(__dirname, 'output/write');
 
-    beforeAll(() => fs.writeFileSync(filepath, '', 'utf-8'));
-    afterAll(() => fs.unlinkSync(filepath));
+    beforeEach(() => fs.writeFileSync(filepath, 'a\nb', 'utf-8'));
+    afterEach(() => fs.unlinkSync(filepath));
 
-    it('write', async () => {
-      await ensureGitignore({ patterns: ['a'], comment: 'managed', filepath });
+    it('write take control existing', async () => {
+      await ensureGitignore({
+        patterns: ['a'],
+        comment: 'custom comment',
+        filepath
+      });
       expect(read(filepath)).toEqual(
-        `# managed
+        `b
+
+# custom comment
 a
+# end custom comment
+`
+      );
+    });
+
+    it('write with existing comment', async () => {
+      await ensureGitignore({
+        patterns: ['c'],
+        comment: 'custom comment',
+        filepath
+      });
+      await ensureGitignore({
+        patterns: ['d', 'e'],
+        comment: 'custom comment',
+        filepath
+      });
+      expect(read(filepath)).toEqual(
+        `a
+b
+
+# custom comment
+d
+e
+# end custom comment
 `
       );
     });

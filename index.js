@@ -12,24 +12,46 @@ const write = async (filepath, output, dryRun) => {
   return output;
 };
 
+const trimArray = arr =>
+  arr
+    .join('\n')
+    .trim()
+    .split('\n');
+
 module.exports = async ({
   patterns = [],
-  comment = '',
+  comment = 'managed by ensure-gitignore',
   filepath = path.resolve(process.cwd(), '.gitignore'),
   dryRun = false
 }) => {
   const sortedPatterns = patterns.sort();
   const contents = await readFile(filepath, 'utf-8');
-  const userSpecified = contents
+  const rawPatterns = contents
+    .trim()
     .split(/\r?\n/)
     .filter(pattern => !sortedPatterns.includes(pattern));
 
-  const outputPatterns = [
-    userSpecified.join('\n').trim(),
-    sortedPatterns.join('\n').trim()
-  ]
-    .join(`\n\n${comment ? `# ${comment}\n` : ''}`)
+  const startComment = `# ${comment}`;
+  const endComment = `# end ${comment}`;
+  const startIndex = rawPatterns.indexOf(startComment);
+  const endIndex = rawPatterns.indexOf(endComment);
+
+  const before =
+    startIndex > 0 ? trimArray(rawPatterns.slice(0, startIndex)) : rawPatterns;
+  const after =
+    endIndex > 0
+      ? trimArray(rawPatterns.slice(rawPatterns.indexOf(endComment) + 1))
+      : [];
+
+  const controlledPatterns =
+    patterns.length > 0
+      ? [`\n${startComment}`, ...sortedPatterns, endComment]
+      : [];
+
+  const outputPatterns = [...before, ...controlledPatterns, ...after]
+    .join('\n')
     .trim();
+
   const output = `${outputPatterns}\n`;
 
   return contents !== output ? write(filepath, output, dryRun) : output;
