@@ -51,7 +51,9 @@ b
 c
 d
 
+# managed
 e
+# end managed
 "
 `);
   });
@@ -70,7 +72,9 @@ b
 c
 d
 
+# managed
 e
+# end managed
 "
 `);
   });
@@ -90,6 +94,7 @@ d
 
 # managed externally
 e
+# end managed externally
 "
 `);
   });
@@ -108,11 +113,12 @@ d
 
 # managed externally
 a/**
+# end managed externally
 "
 `);
   });
 
-  it('take over ignore exact only', async () => {
+  it('take over ignore exact', async () => {
     const output = await ensureGitignore({
       patterns: ['a'],
       filepath: path.join(__dirname, 'output/append'),
@@ -124,7 +130,9 @@ b
 c
 d
 
+# managed
 a
+# end managed
 "
 `);
   });
@@ -140,8 +148,10 @@ a
 c
 d
 
+# managed
 b
 f
+# end managed
 "
 `);
   });
@@ -169,12 +179,17 @@ f
 
 # managed
 a
+# end managed
 `
       );
     });
 
     it('write with existing comment', async () => {
-      await ensureGitignore({ patterns: ['c'], comment: 'managed', filepath });
+      await ensureGitignore({
+        patterns: ['c'],
+        comment: 'managed',
+        filepath
+      });
       await ensureGitignore({
         patterns: ['d', 'e'],
         comment: 'managed',
@@ -183,11 +198,11 @@ a
       expect(read(filepath)).toEqual(
         `a
 b
-c
 
 # managed
 d
 e
+# end managed
 `
       );
     });
