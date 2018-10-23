@@ -20,7 +20,7 @@ const trimArray = arr =>
 
 module.exports = async ({
   patterns = [],
-  comment = 'managed',
+  comment = 'managed by ensure-gitignore',
   filepath = path.resolve(process.cwd(), '.gitignore'),
   dryRun = false
 }) => {

@@ -26,7 +26,7 @@ An array of patterns to ensure are present in the specified `.gitignore` file. A
 
 <a id="comment">
 
-#### comment (?string, default: 'managed')
+#### comment (?string, default: 'managed by ensure-gitignore')
 
 Allows you to document the list of patterns that are being controlled programmatically. This helps provide context as to why/what is controlling certain patterns within a `.gitignore` file. Anything inside the comment block will be re-written on each run.
 
