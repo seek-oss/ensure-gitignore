@@ -1,13 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const { promisify } = require('util');
 const ensureGitignore = require('../index');
 
-const read = filepath =>
-  fs.readFileSync(filepath, 'utf-8', err => {
-    if (err) {
-      throw err;
-    }
-  });
+const writeFile = promisify(fs.writeFile);
+const removeFile = promisify(fs.unlink);
+const readFileAsync = promisify(fs.readFile);
+const readFile = async pathname => await readFileAsync(pathname, 'utf-8');
 
 describe('ensure-gitignore', () => {
   it('empty patterns', async () => {
@@ -169,8 +168,26 @@ f
   describe('file system test', async () => {
     const filepath = path.join(__dirname, 'output/write');
 
-    beforeEach(() => fs.writeFileSync(filepath, 'a\nb', 'utf-8'));
-    afterEach(() => fs.unlinkSync(filepath));
+    beforeEach(async () => await writeFile(filepath, 'a\nb', 'utf-8'));
+    afterEach(async () => await removeFile(filepath));
+
+    it('create file if doesnt exist', async () => {
+      const nonExistantPath = path.join(__dirname, 'output/nonExistant');
+
+      await ensureGitignore({
+        patterns: ['a'],
+        filepath: nonExistantPath
+      });
+      const contents = await readFile(nonExistantPath);
+      await removeFile(nonExistantPath);
+
+      expect(contents).toEqual(
+        `# managed by ensure-gitignore
+a
+# end managed by ensure-gitignore
+`
+      );
+    });
 
     it('write take control existing', async () => {
       await ensureGitignore({
@@ -178,7 +195,8 @@ f
         comment: 'custom comment',
         filepath
       });
-      expect(read(filepath)).toEqual(
+      const contents = await readFile(filepath);
+      expect(contents).toEqual(
         `b
 
 # custom comment
@@ -199,7 +217,8 @@ a
         comment: 'custom comment',
         filepath
       });
-      expect(read(filepath)).toEqual(
+      const contents = await readFile(filepath);
+      expect(contents).toEqual(
         `a
 b
 

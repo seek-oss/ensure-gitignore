@@ -24,8 +24,16 @@ module.exports = async ({
   filepath = path.resolve(process.cwd(), '.gitignore'),
   dryRun = false
 }) => {
+  let contents = '';
+  try {
+    contents = await readFile(filepath, 'utf-8');
+  } catch (e) {
+    if (e.code !== 'ENOENT') {
+      throw e;
+    }
+  }
+
   const sortedPatterns = patterns.sort();
-  const contents = await readFile(filepath, 'utf-8');
   const rawPatterns = contents
     .trim()
     .split(/\r?\n/)
