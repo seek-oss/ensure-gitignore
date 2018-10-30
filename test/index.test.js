@@ -189,6 +189,31 @@ a
       );
     });
 
+    it('ensure controlled patterns block isnt duplicated', async () => {
+      const onlyControlledPatterns = path.join(
+        __dirname,
+        'output/noduplicateblock'
+      );
+
+      await ensureGitignore({
+        patterns: ['a'],
+        filepath: onlyControlledPatterns
+      });
+      await ensureGitignore({
+        patterns: ['a'],
+        filepath: onlyControlledPatterns
+      });
+      const contents = await readFile(onlyControlledPatterns);
+      await removeFile(onlyControlledPatterns);
+
+      expect(contents).toEqual(
+        `# managed by ensure-gitignore
+a
+# end managed by ensure-gitignore
+`
+      );
+    });
+
     it('write take control existing', async () => {
       await ensureGitignore({
         patterns: ['a'],

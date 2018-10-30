@@ -45,9 +45,9 @@ module.exports = async ({
   const endIndex = rawPatterns.indexOf(endComment);
 
   const before =
-    startIndex > 0 ? trimArray(rawPatterns.slice(0, startIndex)) : rawPatterns;
+    startIndex >= 0 ? trimArray(rawPatterns.slice(0, startIndex)) : rawPatterns;
   const after =
-    endIndex > 0
+    endIndex >= 0
       ? trimArray(rawPatterns.slice(rawPatterns.indexOf(endComment) + 1))
       : [];
 
