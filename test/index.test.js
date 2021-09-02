@@ -254,5 +254,28 @@ e
 `
       );
     });
+
+    it('maintains newlines after controlled section', async () => {
+      const contents = `a
+b
+
+# custom comment
+c
+d
+# end custom comment
+
+# another comment, not managed by ensure-gitignore
+e
+f
+`;
+      await writeFile(filepath, contents, 'utf-8');
+      await ensureGitignore({
+        patterns: ['c', 'd'],
+        comment: 'custom comment',
+        filepath
+      });
+      const updatedContents = await readFile(filepath);
+      expect(updatedContents).toEqual(contents);
+    });
   });
 });
