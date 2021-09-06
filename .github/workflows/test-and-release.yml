@@ -42,4 +42,4 @@ jobs:
         run: yarn --immutable
 
       - name: Release
-        run: yarn semarelease
+        run: yarn semantic-release
