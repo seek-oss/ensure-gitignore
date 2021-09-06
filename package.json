@@ -7,7 +7,7 @@
     "lint": "eslint .",
     "release": "changeset publish",
     "test": "jest",
-    "version": "changeset version && yarn"
+    "version": "changeset version"
   },
   "jest": {
     "testEnvironment": "node"
