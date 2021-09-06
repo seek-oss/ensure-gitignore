@@ -2,20 +2,6 @@ name: Test and Release
 
 on: push
 
-common-steps: &setup
-  - name: Checkout Repo
-    uses: actions/checkout@main
-
-  - name: Setup Node.js 14.x
-    uses: actions/setup-node@main
-    with:
-      node-version: 14.x
-
-  - name: Install Dependencies
-    run: yarn --immutable
-
-
-
 jobs:
   test:
     name: Test
@@ -23,7 +9,16 @@ jobs:
     env:
       CI: true
     steps:
-      <<: *setup
+      - name: Checkout Repo
+        uses: actions/checkout@main
+
+      - name: Setup Node.js 14.x
+        uses: actions/setup-node@main
+        with:
+          node-version: 14.x
+
+      - name: Install Dependencies
+        run: yarn --immutable
 
       - name: Test
         run: yarn test
@@ -35,7 +30,16 @@ jobs:
     env:
       CI: true
     steps:
-      <<: *setup
+      - name: Checkout Repo
+        uses: actions/checkout@main
+
+      - name: Setup Node.js 14.x
+        uses: actions/setup-node@main
+        with:
+          node-version: 14.x
+
+      - name: Install Dependencies
+        run: yarn --immutable
 
       - name: Release
-        run: yarn semantic-release
+        run: yarn semarelease
