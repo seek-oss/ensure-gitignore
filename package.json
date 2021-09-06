@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/seek-oss/ensure-gitignore#readme",
   "devDependencies": {
+    "@changesets/cli": "^2.17.0",
     "@commitlint/cli": "^7.2.1",
     "commitizen": "^3.0.2",
     "commitlint-config-seek": "^1.0.0",
