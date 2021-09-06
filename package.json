@@ -4,8 +4,8 @@
   "description": "Ensure the presence of patterns within a project's gitignore",
   "main": "index.js",
   "scripts": {
-    "release": "changeset publish",
     "lint": "eslint .",
+    "release": "changeset publish",
     "test": "jest",
     "version": "changeset version && yarn"
   },
