@@ -43,3 +43,6 @@ jobs:
 
       - name: Release
         run: yarn semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.SEEK_OSS_CI_GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.SEEK_OSS_CI_NPM_TOKEN }}
