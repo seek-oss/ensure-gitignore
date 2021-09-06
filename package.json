@@ -1,6 +1,6 @@
 {
   "name": "ensure-gitignore",
-  "version": "0.0.0-development",
+  "version": "1.1.2",
   "description": "Ensure the presence of patterns within a project's gitignore",
   "main": "index.js",
   "scripts": {
