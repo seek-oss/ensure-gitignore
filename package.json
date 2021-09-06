@@ -4,10 +4,10 @@
   "description": "Ensure the presence of patterns within a project's gitignore",
   "main": "index.js",
   "scripts": {
-    "commit": "git-cz",
-    "semantic-release": "semantic-release",
-    "pretest": "eslint .",
-    "test": "jest"
+    "release": "changeset publish",
+    "lint": "eslint .",
+    "test": "jest",
+    "version": "changeset version && yarn"
   },
   "jest": {
     "testEnvironment": "node"
@@ -36,24 +36,14 @@
   "homepage": "https://github.com/seek-oss/ensure-gitignore#readme",
   "devDependencies": {
     "@changesets/cli": "^2.17.0",
-    "@commitlint/cli": "^7.2.1",
-    "commitizen": "^3.0.2",
-    "commitlint-config-seek": "^1.0.0",
-    "cz-conventional-changelog": "^2.1.0",
     "eslint": "^5.7.0",
     "eslint-config-seek": "^3.2.1",
     "husky": "^1.1.2",
     "jest": "^23.6.0",
     "lint-staged": "^7.3.0",
-    "prettier": "^1.14.3",
-    "semantic-release": "^15.10.3"
+    "prettier": "^1.14.3"
   },
   "release": {
     "success": false
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }
