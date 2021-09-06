@@ -53,7 +53,7 @@ module.exports = async ({
 
   const controlledPatterns =
     patterns.length > 0
-      ? [`\n${startComment}`, ...sortedPatterns, endComment]
+      ? [`\n${startComment}`, ...sortedPatterns, `${endComment}\n`]
       : [];
 
   const outputPatterns = [...before, ...controlledPatterns, ...after]
