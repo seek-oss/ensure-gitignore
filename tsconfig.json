@@ -1,22 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
-    "lib": ["es2019"],
-    "outDir": "dist",
-    "declaration": true,
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "incremental": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "downlevelIteration": true
+    "outDir": "lib",
+    "removeComments": false,
+    "target": "es2020"
   },
-  "exclude": ["node_modules", "dist"],
-  "include": ["src", "test"]
+  "exclude": ["lib*/**/*"],
+  "extends": "skuba/config/tsconfig.json"
 }

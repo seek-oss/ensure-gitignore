@@ -1,4 +1,0 @@
-{
-  "extends": "skuba",
-  "ignorePatterns": "dist"
-}

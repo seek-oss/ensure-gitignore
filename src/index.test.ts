@@ -1,19 +1,17 @@
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
-import { promisify } from 'util';
 
 import ensureGitignore from '../src';
 
-const writeFile = promisify(fs.writeFile);
-const removeFile = promisify(fs.unlink);
-const readFileAsync = promisify(fs.readFile);
+const { writeFile, readFile: readFileAsync, unlink: removeFile } = fs;
+
 const readFile = (pathname: string) => readFileAsync(pathname, 'utf-8');
 
 describe('ensure-gitignore', () => {
   it('empty patterns', async () => {
     const output = await ensureGitignore({
       patterns: [],
-      filepath: path.join(__dirname, 'output/append'),
+      filepath: path.join(__dirname, 'testing/append'),
       dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
@@ -27,7 +25,7 @@ d
 
   it('no patterns', async () => {
     const output = await ensureGitignore({
-      filepath: path.join(__dirname, 'output/append'),
+      filepath: path.join(__dirname, 'testing/append'),
       dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
@@ -42,7 +40,7 @@ d
   it('append new pattern', async () => {
     const output = await ensureGitignore({
       patterns: ['e'],
-      filepath: path.join(__dirname, 'output/append'),
+      filepath: path.join(__dirname, 'testing/append'),
       dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
@@ -61,7 +59,7 @@ e
   it('append preserve whitespace', async () => {
     const output = await ensureGitignore({
       patterns: ['e'],
-      filepath: path.join(__dirname, 'output/appendPreserveWhitespace'),
+      filepath: path.join(__dirname, 'testing/appendPreserveWhitespace'),
       dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
@@ -82,7 +80,7 @@ e
   it('append comment', async () => {
     const output = await ensureGitignore({
       patterns: ['e'],
-      filepath: path.join(__dirname, 'output/append'),
+      filepath: path.join(__dirname, 'testing/append'),
       comment: 'custom comment',
       dryRun: true,
     });
@@ -102,7 +100,7 @@ e
   it('take over ignore', async () => {
     const output = await ensureGitignore({
       patterns: ['a/**'],
-      filepath: path.join(__dirname, 'output/append'),
+      filepath: path.join(__dirname, 'testing/append'),
       comment: 'custom comment',
       dryRun: true,
     });
@@ -121,7 +119,7 @@ a/**
   it('take over ignore exact', async () => {
     const output = await ensureGitignore({
       patterns: ['a'],
-      filepath: path.join(__dirname, 'output/append'),
+      filepath: path.join(__dirname, 'testing/append'),
       dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
@@ -140,7 +138,7 @@ a
   it('take over and append new', async () => {
     const output = await ensureGitignore({
       patterns: ['b', 'f'],
-      filepath: path.join(__dirname, 'output/append'),
+      filepath: path.join(__dirname, 'testing/append'),
       dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
@@ -158,27 +156,27 @@ f
 
   it('error if file not found', async () => {
     await expect(() =>
-      ensureGitignore({ filepath: 'output/notfound' }),
+      ensureGitignore({ filepath: 'testing/notfound' }),
     ).rejects.toThrowError(
-      "ENOENT: no such file or directory, open 'output/notfound'",
+      "ENOENT: no such file or directory, open 'testing/notfound'",
     );
   });
 
   describe('file system test', () => {
-    const filepath = path.join(__dirname, 'output/write');
+    const filepath = path.join(__dirname, 'testing/write');
 
     beforeEach(async () => writeFile(filepath, 'a\nb', 'utf-8'));
     afterEach(async () => removeFile(filepath));
 
-    it('create file if doesnt exist', async () => {
-      const nonExistantPath = path.join(__dirname, 'output/nonExistant');
+    it('create file if it doesn’t exist', async () => {
+      const nonExistentPath = path.join(__dirname, 'testing/nonExistent');
 
       await ensureGitignore({
         patterns: ['a'],
-        filepath: nonExistantPath,
+        filepath: nonExistentPath,
       });
-      const contents = await readFile(nonExistantPath);
-      await removeFile(nonExistantPath);
+      const contents = await readFile(nonExistentPath);
+      await removeFile(nonExistentPath);
 
       expect(contents).toEqual(
         `# managed by ensure-gitignore
@@ -191,7 +189,7 @@ a
     it('ensure controlled patterns block isnt duplicated', async () => {
       const onlyControlledPatterns = path.join(
         __dirname,
-        'output/noduplicateblock',
+        'testing/noduplicateblock',
       );
 
       await ensureGitignore({

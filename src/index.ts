@@ -14,19 +14,15 @@ interface ErrorWithCode {
   code?: string;
 }
 
-const readFileContents = (filepath: string) => {
+const readFileContents = async (filepath: string): Promise<string> => {
   try {
-    return fs.readFile(filepath, 'utf-8');
+    return await fs.readFile(filepath, 'utf-8');
   } catch (e) {
-    if (!e) {
-      throw new Error(`Unable to find file ${filepath}`);
-    }
-
     if ((e as ErrorWithCode).code !== 'ENOENT') {
       throw e;
     }
 
-    throw new Error(`Unable to find file ${filepath}`);
+    return '';
   }
 };
 
