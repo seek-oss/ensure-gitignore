@@ -1,19 +1,20 @@
-const fs = require('fs');
-const path = require('path');
-const { promisify } = require('util');
-const ensureGitignore = require('../index');
+import fs from 'fs';
+import path from 'path';
+import { promisify } from 'util';
+
+import ensureGitignore from '../src';
 
 const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const readFileAsync = promisify(fs.readFile);
-const readFile = async pathname => await readFileAsync(pathname, 'utf-8');
+const readFile = async (pathname) => await readFileAsync(pathname, 'utf-8');
 
 describe('ensure-gitignore', () => {
   it('empty patterns', async () => {
     const output = await ensureGitignore({
       patterns: [],
       filepath: path.join(__dirname, 'output/append'),
-      dryRun: true
+      dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
 "a/**
@@ -27,7 +28,7 @@ d
   it('no patterns', async () => {
     const output = await ensureGitignore({
       filepath: path.join(__dirname, 'output/append'),
-      dryRun: true
+      dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
 "a/**
@@ -42,7 +43,7 @@ d
     const output = await ensureGitignore({
       patterns: ['e'],
       filepath: path.join(__dirname, 'output/append'),
-      dryRun: true
+      dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
 "a/**
@@ -61,7 +62,7 @@ e
     const output = await ensureGitignore({
       patterns: ['e'],
       filepath: path.join(__dirname, 'output/appendPreserveWhitespace'),
-      dryRun: true
+      dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
 "a/**
@@ -83,7 +84,7 @@ e
       patterns: ['e'],
       filepath: path.join(__dirname, 'output/append'),
       comment: 'custom comment',
-      dryRun: true
+      dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
 "a/**
@@ -103,7 +104,7 @@ e
       patterns: ['a/**'],
       filepath: path.join(__dirname, 'output/append'),
       comment: 'custom comment',
-      dryRun: true
+      dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
 "b
@@ -121,7 +122,7 @@ a/**
     const output = await ensureGitignore({
       patterns: ['a'],
       filepath: path.join(__dirname, 'output/append'),
-      dryRun: true
+      dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
 "a/**
@@ -140,7 +141,7 @@ a
     const output = await ensureGitignore({
       patterns: ['b', 'f'],
       filepath: path.join(__dirname, 'output/append'),
-      dryRun: true
+      dryRun: true,
     });
     expect(output).toMatchInlineSnapshot(`
 "a/**
@@ -160,7 +161,7 @@ f
       await ensureGitignore({ filepath: 'output/notfound' });
     } catch ({ message }) {
       expect(message).toEqual(
-        `ENOENT: no such file or directory, open 'output/notfound'`
+        `ENOENT: no such file or directory, open 'output/notfound'`,
       );
     }
   });
@@ -176,7 +177,7 @@ f
 
       await ensureGitignore({
         patterns: ['a'],
-        filepath: nonExistantPath
+        filepath: nonExistantPath,
       });
       const contents = await readFile(nonExistantPath);
       await removeFile(nonExistantPath);
@@ -185,23 +186,23 @@ f
         `# managed by ensure-gitignore
 a
 # end managed by ensure-gitignore
-`
+`,
       );
     });
 
     it('ensure controlled patterns block isnt duplicated', async () => {
       const onlyControlledPatterns = path.join(
         __dirname,
-        'output/noduplicateblock'
+        'output/noduplicateblock',
       );
 
       await ensureGitignore({
         patterns: ['a'],
-        filepath: onlyControlledPatterns
+        filepath: onlyControlledPatterns,
       });
       await ensureGitignore({
         patterns: ['a'],
-        filepath: onlyControlledPatterns
+        filepath: onlyControlledPatterns,
       });
       const contents = await readFile(onlyControlledPatterns);
       await removeFile(onlyControlledPatterns);
@@ -210,7 +211,7 @@ a
         `# managed by ensure-gitignore
 a
 # end managed by ensure-gitignore
-`
+`,
       );
     });
 
@@ -218,7 +219,7 @@ a
       await ensureGitignore({
         patterns: ['a'],
         comment: 'custom comment',
-        filepath
+        filepath,
       });
       const contents = await readFile(filepath);
       expect(contents).toEqual(
@@ -227,7 +228,7 @@ a
 # custom comment
 a
 # end custom comment
-`
+`,
       );
     });
 
@@ -235,12 +236,12 @@ a
       await ensureGitignore({
         patterns: ['c'],
         comment: 'custom comment',
-        filepath
+        filepath,
       });
       await ensureGitignore({
         patterns: ['d', 'e'],
         comment: 'custom comment',
-        filepath
+        filepath,
       });
       const contents = await readFile(filepath);
       expect(contents).toEqual(
@@ -251,7 +252,7 @@ b
 d
 e
 # end custom comment
-`
+`,
       );
     });
 
@@ -272,7 +273,7 @@ f
       await ensureGitignore({
         patterns: ['c', 'd'],
         comment: 'custom comment',
-        filepath
+        filepath,
       });
       const updatedContents = await readFile(filepath);
       expect(updatedContents).toEqual(contents);
