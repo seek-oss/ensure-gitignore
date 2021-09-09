@@ -7,7 +7,7 @@ import ensureGitignore from '../src';
 const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const readFileAsync = promisify(fs.readFile);
-const readFile = async (pathname) => await readFileAsync(pathname, 'utf-8');
+const readFile = (pathname: string) => readFileAsync(pathname, 'utf-8');
 
 describe('ensure-gitignore', () => {
   it('empty patterns', async () => {
@@ -157,20 +157,18 @@ f
   });
 
   it('error if file not found', async () => {
-    try {
-      await ensureGitignore({ filepath: 'output/notfound' });
-    } catch ({ message }) {
-      expect(message).toEqual(
-        `ENOENT: no such file or directory, open 'output/notfound'`,
-      );
-    }
+    await expect(() =>
+      ensureGitignore({ filepath: 'output/notfound' }),
+    ).rejects.toThrowError(
+      "ENOENT: no such file or directory, open 'output/notfound'",
+    );
   });
 
-  describe('file system test', async () => {
+  describe('file system test', () => {
     const filepath = path.join(__dirname, 'output/write');
 
-    beforeEach(async () => await writeFile(filepath, 'a\nb', 'utf-8'));
-    afterEach(async () => await removeFile(filepath));
+    beforeEach(async () => writeFile(filepath, 'a\nb', 'utf-8'));
+    afterEach(async () => removeFile(filepath));
 
     it('create file if doesnt exist', async () => {
       const nonExistantPath = path.join(__dirname, 'output/nonExistant');
