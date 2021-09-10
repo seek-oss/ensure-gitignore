@@ -1,9 +1,11 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
+const { writeFile, readFile } = fs;
+
 const write = async (filepath: string, output: string, dryRun: boolean) => {
   if (!dryRun) {
-    await fs.writeFile(filepath, output);
+    await writeFile(filepath, output);
   }
   return output;
 };
@@ -16,7 +18,7 @@ interface ErrorWithCode {
 
 const readFileContents = async (filepath: string): Promise<string> => {
   try {
-    return await fs.readFile(filepath, 'utf-8');
+    return await readFile(filepath, 'utf-8');
   } catch (e) {
     if ((e as ErrorWithCode).code !== 'ENOENT') {
       throw e;
