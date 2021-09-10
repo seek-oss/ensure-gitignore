@@ -16,18 +16,6 @@ interface ErrorWithCode {
   code?: string;
 }
 
-const readFileContents = async (filepath: string): Promise<string> => {
-  try {
-    return await readFile(filepath, 'utf-8');
-  } catch (e) {
-    if ((e as ErrorWithCode).code !== 'ENOENT') {
-      throw e;
-    }
-
-    return '';
-  }
-};
-
 interface EnsureGitignoreConfig {
   patterns?: string[];
   comment?: string;
@@ -41,7 +29,14 @@ export default async ({
   filepath = path.resolve(process.cwd(), '.gitignore'),
   dryRun = false,
 }: EnsureGitignoreConfig) => {
-  const contents = await readFileContents(filepath);
+  let contents = '';
+  try {
+    contents = await readFile(filepath, 'utf-8');
+  } catch (e) {
+    if ((e as ErrorWithCode).code !== 'ENOENT') {
+      throw e;
+    }
+  }
 
   const sortedPatterns = patterns.sort();
   const rawPatterns = contents
