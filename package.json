@@ -3,6 +3,7 @@
   "version": "1.1.3",
   "description": "Ensure the presence of patterns within a project's gitignore",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "lint": "eslint .",
     "release": "changeset publish",
