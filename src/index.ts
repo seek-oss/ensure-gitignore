@@ -12,10 +12,6 @@ const write = async (filepath: string, output: string, dryRun: boolean) => {
 
 const trimArray = <T>(arr: T[]) => arr.join('\n').trim().split('\n');
 
-interface ErrorWithCode {
-  code?: string;
-}
-
 interface EnsureGitignoreConfig {
   patterns?: string[];
   comment?: string;
@@ -33,7 +29,7 @@ export default async ({
   try {
     contents = await readFile(filepath, 'utf-8');
   } catch (e) {
-    if ((e as ErrorWithCode).code !== 'ENOENT') {
+    if ((e as { code?: string }).code !== 'ENOENT') {
       throw e;
     }
   }
