@@ -9,6 +9,8 @@ jobs:
   release:
     name: Publish & Deploy
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     env:
       CI: true
     steps:
