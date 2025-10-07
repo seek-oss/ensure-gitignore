@@ -10,12 +10,12 @@ jobs:
       CI: true
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@main
+        uses: actions/checkout@v5
 
-      - name: Setup Node.js 14.x
-        uses: actions/setup-node@main
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
         with:
-          node-version: 14.x
+          node-version-file: .nvmrc
 
       - name: Install Dependencies
         run: yarn --immutable
