@@ -9,7 +9,12 @@
     "index.d.ts"
   ],
   "scripts": {
-    "lint": "eslint .",
+    "lint": "pnpm run '/^lint:.*/'",
+    "lint:eslint": "eslint .",
+    "lint:prettier": "prettier --check .",
+    "format": "pnpm run '/^format:.*/'",
+    "format:eslint": "eslint --fix .",
+    "format:prettier": "prettier --write .",
     "release": "changeset publish",
     "test": "jest"
   },
