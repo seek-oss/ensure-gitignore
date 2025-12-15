@@ -1,4 +1,4 @@
-import eslintConfigSeek from 'eslint-config-seek';
+import eslintConfigSeek from 'eslint-config-seek/vitest/base';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig(
