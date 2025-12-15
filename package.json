@@ -16,22 +16,7 @@
     "format:eslint": "eslint --fix .",
     "format:prettier": "prettier --write .",
     "release": "changeset publish",
-    "test": "jest"
-  },
-  "jest": {
-    "testEnvironment": "node"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint --edit --extends seek",
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "git add"
-    ]
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
@@ -44,15 +29,13 @@
   },
   "homepage": "https://github.com/seek-oss/ensure-gitignore#readme",
   "devDependencies": {
-    "@changesets/cli": "^2.17.0",
-    "eslint": "^5.7.0",
-    "eslint-config-seek": "^3.2.1",
-    "husky": "^1.1.2",
-    "jest": "^23.6.0",
-    "lint-staged": "^7.3.0",
-    "prettier": "^1.14.3"
+    "@changesets/cli": "^2.29.8",
+    "@tsconfig/node22": "^22.0.5",
+    "eslint": "^9.39.2",
+    "eslint-config-seek": "^15.0.1",
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3",
+    "vitest": "4.0.15"
   },
-  "release": {
-    "success": false
-  }
+  "packageManager": "pnpm@10.25.0"
 }

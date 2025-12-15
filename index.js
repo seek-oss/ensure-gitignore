@@ -12,17 +12,13 @@ const write = async (filepath, output, dryRun) => {
   return output;
 };
 
-const trimArray = arr =>
-  arr
-    .join('\n')
-    .trim()
-    .split('\n');
+const trimArray = (arr) => arr.join('\n').trim().split('\n');
 
 module.exports = async ({
   patterns = [],
   comment = 'managed by ensure-gitignore',
   filepath = path.resolve(process.cwd(), '.gitignore'),
-  dryRun = false
+  dryRun = false,
 }) => {
   let contents = '';
   try {
@@ -37,7 +33,7 @@ module.exports = async ({
   const rawPatterns = contents
     .trim()
     .split(/\r?\n/)
-    .filter(pattern => !sortedPatterns.includes(pattern));
+    .filter((pattern) => !sortedPatterns.includes(pattern));
 
   const startComment = `# ${comment}`;
   const endComment = `# end ${comment}`;

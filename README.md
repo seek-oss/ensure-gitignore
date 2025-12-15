@@ -8,7 +8,7 @@ Ensure the presence of patterns within a project's gitignore.
 const ensureGitignore = require('ensure-gitignore');
 
 await ensureGitignore({
-  patterns: ['node_modules', 'output']
+  patterns: ['node_modules', 'output'],
 });
 ```
 
@@ -33,7 +33,7 @@ const ensureGitignore = require('ensure-gitignore');
 
 await ensureGitignore({
   patterns: ['node_modules', 'output'],
-  comment: 'managed by build script'
+  comment: 'managed by build script',
 });
 
 // =>
@@ -53,7 +53,7 @@ const ensureGitignore = require('ensure-gitignore');
 
 const result = await ensureGitignore({
   patterns: ['node_modules', 'output'],
-  dryRun: true
+  dryRun: true,
 });
 
 // result:
