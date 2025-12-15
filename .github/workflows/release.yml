@@ -15,15 +15,18 @@ jobs:
       CI: true
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
 
       - name: Install Dependencies
-        run: yarn --immutable
+        run: pnpm install
 
       # Ensure npm 11.5.1 or later is installed
       - name: Install latest npm
@@ -32,6 +35,6 @@ jobs:
       - name: Create release PR or publish to npm
         uses: changesets/action@v1
         with:
-          publish: yarn release
+          publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
